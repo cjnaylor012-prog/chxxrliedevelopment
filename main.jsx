@@ -263,3 +263,12 @@ export default function NeonPortfolio() {
     </div>
   );
 }
+
+// src/main.jsx
+import React from "react";
+
+function Main() {
+  return <h1>Hello, this is Main!</h1>;
+}
+
+export default Main;
