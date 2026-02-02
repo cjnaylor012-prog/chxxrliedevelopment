@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chxxrlie_'s Development Portfolio</title>
+<style>
+/* ===== Base ===== */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to bottom right, #000, #170025, #000);
+  color: white;
+  overflow-x: hidden;
+}
+
+/* ===== Neon Text ===== */
+.glow-text {
+  color: #c084fc;
+  text-shadow: 0 0 5px #c084fc, 0 0 10px #c084fc, 0 0 20px #c084fc, 0 0 40px #c084fc;
+}
+.subtle-neon {
+  text-shadow: 0 0 3px rgba(192,132,252,0.5), 0 0 6px rgba(192,132,252,0.4), 0 0 10px rgba(192,132,252,0.3);
+}
+
+/* ===== Container ===== */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  position: relative;
+  z-index: 10; /* above neon lines */
+}
+
+/* ===== Neon Animated Background Lines ===== */
+.neon-bar {
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  opacity: 0.2;
+  animation: pulse 4s ease-in-out infinite;
+  z-index: 0; /* behind everything */
+}
+.neon-bar:nth-child(1) { left: 25%; background: #9d4edd; animation-delay: 0s; }
+.neon-bar:nth-child(2) { left: 50%; background: #d8b4fe; animation-delay: 1s; }
+.neon-bar:nth-child(3) { left: 75%; background: #c084fc; animation-delay: 2s; }
+@keyframes pulse {
+  0%,100% {opacity:0.2; transform:translateY(0);}
+  50% {opacity:0.5; transform:translateY(-5px);}
+}
+
+/* ===== Title Box ===== */
+.title-box {
+  background: rgba(0,0,0,0.5);
+  padding: 20px 40px;
+  border-radius: 15px;
+  text-align: center;
+  margin-bottom: 40px;
+  box-shadow: 0 0 20px rgba(192,132,252,0.4);
+}
+
+/* ===== Sections Grid ===== */
+.sections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+.section-card {
+  background: rgba(0,0,0,0.7);
+  border-radius: 15px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 0 30px #c084fc;
+  transition: transform 0.3s;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.6s forwards;
+}
+.section-card:hover { transform: scale(1.05); }
+.section-card img { width: 100%; height: 200px; object-fit: cover; }
+.section-card h2 { text-align: center; color: #c084fc; }
+.section-card p { text-align: center; color: #d8b4fe; }
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Items Grid ===== */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+.item-card {
+  padding: 10px;
+  text-align: center;
+  background: rgba(0,0,0,0.5);
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 15px #c084fc;
+  transition: background 0.3s, transform 0.3s, opacity 0.5s;
+  opacity: 0;
+  transform: translateY(20px);
+}
+.item-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.item-card:hover { background: rgba(160,0,255,0.2); }
+
+/* ===== Slider ===== */
+.slider {
+  position: relative;
+  max-width: 100%;
+  height: 500px;
+  margin-bottom: 50px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 50px #c084fc;
+}
+.slider img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0; left: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+.slider img.active { opacity: 1; }
+
+.slider button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: #c084fc;
+  font-size: 2rem;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: transform 0.2s;
+}
+.slider button:hover { transform: translateY(-50%) scale(1.2); }
+.slider .prev { left: 10px; }
+.slider .next { right: 10px; }
+.slider .fullscreen-btn { top: 10px; right: 10px; font-size: 1.5rem; padding: 5px 10px; }
+
+.slider-caption {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.6);
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  color: #d8b4fe;
+  font-size: 1.2rem;
+}
+
+/* ===== Fullscreen Overlay ===== */
+.fullscreen-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+.fullscreen-overlay.show { display:flex; opacity:1; }
+.fullscreen-overlay img { max-width: 90%; max-height: 90%; }
+.fullscreen-overlay button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 2rem;
+  background: rgba(0,0,0,0.5);
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+/* ===== Discord Panel ===== */
+.discord-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(88,101,242,0.9);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #7289da;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.2s;
+}
+.discord-panel:hover { transform: scale(1.05); }
+</style>
+</head>
+<body>
+
+<!-- Neon Lines -->
+<div class="neon-bar"></div>
+<div class="neon-bar"></div>
+<div class="neon-bar"></div>
+
+<div class="container">
+  <!-- Title Box -->
+  <div class="title-box">
+    <h1 class="glow-text subtle-neon">chxxrlie_'s Development Portfolio</h1>
+    <p class="subtle-neon" style="color:#d8b4fe; margin-top:5px;"></p>
+  </div>
+
+  <!-- Sections -->
+  <div class="sections-grid" id="sectionsGrid"></div>
+  <div id="activeSectionContainer"></div>
+</div>
+
+<!-- Fullscreen Overlay -->
+<div id="fullscreenOverlay" class="fullscreen-overlay" onclick="closeFullscreen(event)">
+  <img id="fullscreenImg" src="" alt="">
+  <button onclick="closeFullscreen()">✕</button>
+</div>
+
+<!-- Discord Panel -->
+<div class="discord-panel" onclick="window.open('https://discord.com/users/YOUR_ID', '_blank')">
+  💬 Contact me on Discord
+</div>
+
+<script>
+// ===== Sections Data =====
+const sections = [
+  { name: "Scripts", image: "https://i.postimg.cc/VLTvB1bh/image-(31).png", items: [
+    { name: "Royal Military Police", images: ["https://i.postimg.cc/j5jn32g0/image_(27).png","https://i.postimg.cc/s2mZJ7cf/image_(28).png","https://i.postimg.cc/tRsHd6d2/image-(29).png"] },
+    { name: "Discord Bots", images: ["https://i.postimg.cc/g2CwddzG/image-(32).png","https://images.unsplash.com/photo-1517245386807-bb43f82c33c4"] }
+  ] },
+  { name: "Map Development", image: "https://i.postimg.cc/y6gw3Hs6/image-(30).png", items: [
+    { name: "Aston Academy RBLX", images: ["https://i.postimg.cc/fbpwcb9P/no-Filter.webp","https://i.postimg.cc/qMw4mwKg/no-Filter.webp","https://i.postimg.cc/yd0z0yBC/no-Filter.webp","https://i.postimg.cc/RhR5DCNp/no-Filter.webp","https://i.postimg.cc/QdPLPyxY/no-Filter.webp"] },
+    { name: "Rotherham South Yorkshire", images: ["https://i.postimg.cc/3r9cVcLM/image.png","https://i.postimg.cc/cCJXddD0/image.png","https://i.postimg.cc/XvQ54dtM/image.png"] },
+    { name: "Cambridge England", images: ["https://i.postimg.cc/bvNTxyhn/image.png","https://i.postimg.cc/GtYJL9F0/image.png","https://i.postimg.cc/YCtf7rjv/image.png"] }
+  ] },
+  { name: "Vehicle Development", image: "https://i.postimg.cc/qqRqwF72/image-(26).png", items: [
+    { name: "Heathrow Fire Engine", images: ["https://i.postimg.cc/C1xQxC1q/image.png"] },
+    { name: "Audi Q5", images: ["https://i.postimg.cc/DzBxHWg5/image.png"] },
+    { name: "Peugeot 308 Marked Police Car", images: ["https://i.postimg.cc/rwqbHLTc/image.png"] },
+    { name: "BMW M4", images: ["https://i.postimg.cc/Y0w8m12R/image.png"] },
+    { name: "Scania S730", images: ["https://i.postimg.cc/5y1qtbpk/image.png"] },
+    { name: "Triumph Spitfire MKIII", images: ["https://i.postimg.cc/PfzQRv5k/image.png"] },
+    { name: "Subaru Imprezza", images: ["https://i.postimg.cc/DZQLHRF9/image.png"] }
+  ] }
+];
+
+const sectionsGrid = document.getElementById('sectionsGrid');
+const activeSectionContainer = document.getElementById('activeSectionContainer');
+const fullscreenOverlay = document.getElementById('fullscreenOverlay');
+const fullscreenImg = document.getElementById('fullscreenImg');
+let activeSection=null, activeItem=null, slideIndex=0;
+
+// ===== Render Sections =====
+sections.forEach((section,i)=>{
+  const div=document.createElement('div');
+  div.className='section-card';
+  div.style.animationDelay=`${i*0.1}s`;
+  div.innerHTML=`<img src="${section.image}" alt="${section.name}"><h2>${section.name}</h2><p>${section.items.length} Projects</p>`;
+  div.onclick=()=>{ activeSection=(activeSection===section?null:section); activeItem=null; slideIndex=0; renderActiveSection(); };
+  sectionsGrid.appendChild(div);
+});
+
+// ===== Render Active Section =====
+function renderActiveSection(){
+  if(!activeSection){activeSectionContainer.innerHTML=''; return;}
+  let html=`<h3 class="glow-text" style="text-align:center;margin-bottom:20px;">${activeSection.name}</h3>`;
+  html+=`<div class="items-grid">`;
+  activeSection.items.forEach((item,i)=>{
+    html+=`<div class="item-card" id="item-${i}">${item.name}</div>`;
+  });
+  html+=`</div>`;
+  if(activeItem){
+    html+=`<div class="slider" id="sliderContainer">`;
+    activeItem.images.forEach((img,i)=>{
+      html+=`<img src="${img}" class="${i===slideIndex?'active':''}" id="slide-${i}">`;
+    });
+    html+=`<button class="prev" onclick="prevSlide()">❮</button>
+           <button class="next" onclick="nextSlide()">❯</button>
+           <button class="fullscreen-btn" onclick="openFullscreen()">⛶</button>
+           <div class="slider-caption">${activeItem.name}</div>
+    </div>`;
+  }
+  activeSectionContainer.innerHTML=html;
+
+  // Animate items with stagger
+  activeSection.items.forEach((_,i)=>{
+    const el=document.getElementById(`item-${i}`);
+    setTimeout(()=>{el.classList.add('show');}, i*100);
+    el.onclick=()=>{activeItem=activeSection.items[i]; slideIndex=0; renderActiveSection();}
+  });
+}
+
+// ===== Slider Functions =====
+function updateSlides(){ activeItem.images.forEach((_,i)=>{ document.getElementById(`slide-${i}`).classList.remove('active'); }); document.getElementById(`slide-${slideIndex}`).classList.add('active'); }
+function nextSlide(){ if(!activeItem)return; slideIndex=(slideIndex+1)%activeItem.images.length; updateSlides();}
+function prevSlide(){ if(!activeItem)return; slideIndex=(slideIndex===0?activeItem.images.length-1:slideIndex-1); updateSlides();}
+
+// ===== Fullscreen =====
+function openFullscreen(){
+  fullscreenOverlay.classList.add('show');
+  fullscreenImg.src=activeItem.images[slideIndex];
+}
+function closeFullscreen(event){
+  if(!event || event.target===fullscreenOverlay){ 
+    fullscreenOverlay.classList.remove('show');
+  }
+}
+document.addEventListener('keydown', (e)=>{ if(e.key==="Escape") closeFullscreen(); });
+</script>
+</body>
+</html>
